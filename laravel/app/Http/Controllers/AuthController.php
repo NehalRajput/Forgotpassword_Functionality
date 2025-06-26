@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
-use Hash;
+use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
@@ -54,25 +54,4 @@ class AuthController extends Controller
 
         return redirect('/login')->with('success', 'Registered! You can now log in.');
     }
-
-    public function showForgotForm()
-    {
-    return view('auth.forgot-password');
-    }
-
-public function handleForgot(Request $request)
-{
-    $request->validate([
-        'email' => 'required|email|exists:users,email',
-        'password' => 'required|min:6|confirmed',
-    ]);
-
-    $user = User::where('email', $request->email)->first();
-
-    $user->password = Hash::make($request->password);
-    $user->save();
-
-    return redirect('/login')->with('success', 'Password updated! Please login.');
 }
-}
-
